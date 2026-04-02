@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "sdk-knowledge-base": {
+      "command": "python",
+      "args": [
+        "D:/code/iobject-java-sdk-knowledge/scripts/mcp_server.py"
+      ],
+      "env": {
+        "SDK_API_URL": "http://localhost:8000"
+      }
+    }
+  }
+}
