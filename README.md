@@ -10,6 +10,14 @@ SuperMap iObjects Java SDK 知识库系统，基于语义搜索的 API 文档查
 - **HTTP API**: 提供 FastAPI 构建的 RESTful API 服务
 - **CLI 工具**: 提供方便的命令行查询工具
 
+## 使用示例
+
+### 语义搜索示例
+
+![语义搜索示例1](image/示例1.png)
+
+![语义搜索示例2](image/示例2.png)
+
 ## 快速开始
 
 ### 1. 构建项目
