@@ -22,11 +22,22 @@ COPY requirements.txt .
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# 安装依赖
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+# 设置环境变量（加速模型下载）
+ENV PATH="/opt/venv/bin:$PATH" \
+    HF_ENDPOINT=https://hf-mirror.com \
+    TRANSFORMERS_OFFLINE=0
 
-# 下载 sentence-transformers 模型
+# 安装依赖（使用清华镜像加速）
+RUN pip install --no-cache-dir --upgrade pip -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip install --no-cache-dir -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# 使用本地预下载的模型（不重新下载）
+ENV HF_HUB_OFFLINE=1
+
+# 复制本地模型
+COPY models_cache/hub/models--sentence-transformers--all-MiniLM-L6-v2/ /root/.cache/huggingface/hub/models--sentence-transformers--all-MiniLM-L6-v2/
+
+# 复制模型到应用目录
 RUN mkdir -p /app/models && \
     python -c "from sentence_transformers import SentenceTransformer; model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2'); model.save('/app/models/all-MiniLM-L6-v2')" && \
     ls -la /app/models/

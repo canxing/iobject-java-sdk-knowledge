@@ -8,7 +8,7 @@ cd "$SCRIPT_DIR"
 
 # Configuration
 INPUT_DIR="${1:-SuperMap iObjects Java Javadoc}"
-OUTPUT_JSON="data/sdk_knowledge.json"
+OUTPUT_JSON="data/parsed_javadoc.json"
 CHROMA_DB="data/chroma_db"
 IMAGE_NAME="sdk-kb:latest"
 
@@ -43,7 +43,7 @@ $PYTHON scripts/parse_javadoc.py "$INPUT_DIR" "$OUTPUT_JSON"
 # Step 3: Build vector database
 echo ""
 echo "Step 3: Building vector database..."
-$PYTHON scripts/build_vector_db.py "$OUTPUT_JSON" "$CHROMA_DB"
+$PYTHON scripts/build_vector_db.py --input "$OUTPUT_JSON" --output "$CHROMA_DB"
 
 # Step 4: Build Docker image
 echo ""
