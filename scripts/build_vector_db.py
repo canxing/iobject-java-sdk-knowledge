@@ -12,6 +12,7 @@ from typing import Any, Dict, List
 import chromadb
 from chromadb.config import Settings
 from sentence_transformers import SentenceTransformer
+from tqdm import tqdm
 
 
 class VectorDBBuilder:
@@ -185,10 +186,8 @@ class VectorDBBuilder:
         total_batches = (len(documents) + batch_size - 1) // batch_size
         print(f"开始处理，批大小: {batch_size}，共 {total_batches} 批")
 
-        for i in range(0, len(documents), batch_size):
+        for i in tqdm(range(0, len(documents), batch_size), desc="Vectorizing", total=total_batches):
             batch = documents[i : i + batch_size]
-            batch_num = i // batch_size + 1
-            print(f"处理第 {batch_num}/{total_batches} 批，共 {len(batch)} 个文档...")
 
             # 提取数据
             ids = [doc["id"] for doc in batch]
