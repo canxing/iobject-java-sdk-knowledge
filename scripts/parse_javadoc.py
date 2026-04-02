@@ -9,6 +9,7 @@ import re
 import json
 from pathlib import Path
 from bs4 import BeautifulSoup
+from tqdm import tqdm
 
 
 class JavadocParser:
@@ -275,7 +276,8 @@ class JavadocParser:
         results = []
 
         # 遍历所有 HTML 文件
-        for html_file in input_path.rglob("*.html"):
+        html_files = list(input_path.rglob("*.html"))
+        for html_file in tqdm(html_files, desc='Parsing HTML'):
             try:
                 result = self.parse_file(html_file)
                 if result["class"]:  # 只保存成功解析的类
