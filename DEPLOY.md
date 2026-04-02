@@ -173,6 +173,17 @@ curl -X POST http://localhost:8000/search \
 - API 文档：http://localhost:8000/docs
 - 健康检查：http://localhost:8000/health
 
+#### MCP 集成测试
+
+如果使用 Claude Code，配置 MCP 后可以直接提问：
+
+```
+"帮我找一下打开工作空间的方法"
+"如何创建数据集？"
+```
+
+MCP 配置方法见项目 README.md。
+
 ## CLI 配置
 
 ### 1. 配置 query-sdk 脚本

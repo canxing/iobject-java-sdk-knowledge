@@ -193,7 +193,29 @@ MCP (Model Context Protocol) 是 Claude 的插件协议，允许 Claude Code 直
 
 ### 配置方法
 
-在 Claude Code 设置中添加 MCP 服务器：
+**方法 1：项目级配置（推荐）**
+
+在项目根目录创建 `.mcp.json`：
+
+```json
+{
+  "mcpServers": {
+    "sdk-kb": {
+      "command": "D:/code/iobject-java-sdk-knowledge/venv/Scripts/python.exe",
+      "args": [
+        "D:/code/iobject-java-sdk-knowledge/scripts/mcp_server.py"
+      ],
+      "env": {
+        "SDK_API_URL": "http://localhost:8000"
+      }
+    }
+  }
+}
+```
+
+**方法 2：全局配置**
+
+在 Claude Code 全局设置中添加：
 
 ```json
 {
