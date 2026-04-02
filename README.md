@@ -185,6 +185,54 @@ export SDK_API_URL=http://localhost:8000
 ./query-sdk "查询"
 ```
 
+## MCP 集成（Claude Code）
+
+### 什么是 MCP
+
+MCP (Model Context Protocol) 是 Claude 的插件协议，允许 Claude Code 直接调用 SDK 知识库。
+
+### 配置方法
+
+在 Claude Code 设置中添加 MCP 服务器：
+
+```json
+{
+  "mcpServers": {
+    "sdk-kb": {
+      "command": "D:/code/iobject-java-sdk-knowledge/venv/Scripts/python.exe",
+      "args": [
+        "D:/code/iobject-java-sdk-knowledge/scripts/mcp_server.py"
+      ],
+      "env": {
+        "SDK_API_URL": "http://localhost:8000"
+      }
+    }
+  }
+}
+```
+
+配置文件路径：
+- Windows: `%APPDATA%\Claude\settings.json`
+
+### 使用示例
+
+配置完成后，直接在 Claude Code 中提问：
+
+```
+"帮我查找打开工作空间的方法"
+"如何创建数据集？"
+"Dispose 方法是做什么的？"
+```
+
+Claude 会自动调用 `search_sdk_api` 工具查询并返回结果。
+
+### MCP 工具列表
+
+| 工具名 | 功能 | 参数 |
+|--------|------|------|
+| `search_sdk_api` | 搜索 SDK API | `query`: 查询语句<br>`top_k`: 结果数量(1-10) |
+| `get_sdk_api_info` | 获取知识库信息 | 无 |
+
 ## API 端点说明
 
 ### 1. 根端点
