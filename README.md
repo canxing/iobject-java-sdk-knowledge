@@ -19,6 +19,21 @@ SuperMap iObjects Java SDK 知识库系统，基于语义搜索的 API 文档查
 ./build.sh
 ```
 
+**注意**: 如果下载依赖较慢，可以使用清华镜像加速：
+
+```bash
+# Linux/macOS: 复制 pip 配置文件
+cp pip.conf ~/.pip/pip.conf
+
+# Windows: 复制 pip 配置文件
+mkdir %APPDATA%\pip
+copy pip.ini %APPDATA%\pip\pip.ini
+
+# 或使用环境变量
+export PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple  # Linux/macOS
+set PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple      # Windows
+```
+
 构建脚本会自动完成以下步骤：
 1. 检查并安装 Python 依赖
 2. 解析 Javadoc HTML 文档
