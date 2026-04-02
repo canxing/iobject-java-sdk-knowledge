@@ -1,0 +1,640 @@
+[
+  {
+    "class": "AgencyS57",
+    "package": "com.supermap.chart",
+    "full_class": "com.supermap.chart.AgencyS57",
+    "file": "SuperMap iObjects Java Javadoc\\com\\supermap\\chart\\AgencyS57.html",
+    "methods": [
+      {
+        "name": "dispose",
+        "signature": "void dispose()",
+        "modifiers": null,
+        "description": "释放 AgencyS57 对象所占用的本地资源。"
+      },
+      {
+        "name": "getAgencyName",
+        "signature": "String getAgencyName()",
+        "modifiers": null,
+        "description": "返回机构名称。"
+      },
+      {
+        "name": "getCode",
+        "signature": "int getCode()",
+        "modifiers": null,
+        "description": "返回机构编码。"
+      },
+      {
+        "name": "getHandle",
+        "signature": "static long getHandle(com.supermap.data.InternalHandle obj)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "getToken",
+        "signature": "String getToken()",
+        "modifiers": null,
+        "description": "返回机构缩写。"
+      },
+      {
+        "name": "setHandle",
+        "signature": "static void setHandle(com.supermap.data.InternalHandle obj, long handle)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "setIsDisposable",
+        "signature": "static void setIsDisposable(com.supermap.data.InternalHandleDisposable obj, boolean disposable)",
+        "modifiers": "static",
+        "description": null
+      }
+    ]
+  },
+  {
+    "class": "AgencyS57s",
+    "package": "com.supermap.chart",
+    "full_class": "com.supermap.chart.AgencyS57s",
+    "file": "SuperMap iObjects Java Javadoc\\com\\supermap\\chart\\AgencyS57s.html",
+    "methods": [
+      {
+        "name": "dispose",
+        "signature": "void dispose()",
+        "modifiers": null,
+        "description": "释放对象所占用的资源。"
+      },
+      {
+        "name": "get",
+        "signature": "AgencyS57 get(int index)",
+        "modifiers": null,
+        "description": "根据指定索引获取生产机构。"
+      },
+      {
+        "name": "getByCode",
+        "signature": "AgencyS57 getByCode(int code)",
+        "modifiers": null,
+        "description": "根据给定的机构编码返回 S-57 生产机构AgencyS57对象。"
+      },
+      {
+        "name": "getByToken",
+        "signature": "AgencyS57 getByToken(StringstrToken)",
+        "modifiers": null,
+        "description": "根据给定的机构缩写返回生产机构AgencyS57对象。"
+      },
+      {
+        "name": "getCount",
+        "signature": "int getCount()",
+        "modifiers": null,
+        "description": "获取生产机构的个数。"
+      },
+      {
+        "name": "getHandle",
+        "signature": "static long getHandle(com.supermap.data.InternalHandle obj)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "setHandle",
+        "signature": "static void setHandle(com.supermap.data.InternalHandle obj, long handle)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "setIsDisposable",
+        "signature": "static void setIsDisposable(com.supermap.data.InternalHandleDisposable obj, boolean disposable)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "toArray",
+        "signature": "AgencyS57[] toArray()",
+        "modifiers": null,
+        "description": "转换为生产机构对象的数组集合。"
+      }
+    ]
+  },
+  {
+    "class": "Association",
+    "package": "com.supermap.chart",
+    "full_class": "com.supermap.chart.Association",
+    "file": "SuperMap iObjects Java Javadoc\\com\\supermap\\chart\\Association.html",
+    "methods": [
+      {
+        "name": "getHandle",
+        "signature": "static long getHandle(com.supermap.data.InternalHandle obj)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "getRole1",
+        "signature": "String getRole1()",
+        "modifiers": null,
+        "description": "获取关联关系中的角色1。"
+      },
+      {
+        "name": "getRole2",
+        "signature": "String getRole2()",
+        "modifiers": null,
+        "description": "获取关联关系中的角色2。"
+      },
+      {
+        "name": "getType",
+        "signature": "S100FCObjectType getType()",
+        "modifiers": null,
+        "description": "获取关联关系类型。"
+      },
+      {
+        "name": "setHandle",
+        "signature": "static void setHandle(com.supermap.data.InternalHandle obj, long handle)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "setIsDisposable",
+        "signature": "static void setIsDisposable(com.supermap.data.InternalHandleDisposable obj, boolean disposable)",
+        "modifiers": "static",
+        "description": null
+      }
+    ]
+  },
+  {
+    "class": "Associations",
+    "package": "com.supermap.chart",
+    "full_class": "com.supermap.chart.Associations",
+    "file": "SuperMap iObjects Java Javadoc\\com\\supermap\\chart\\Associations.html",
+    "methods": [
+      {
+        "name": "get",
+        "signature": "Association get(int index)",
+        "modifiers": null,
+        "description": "根据给定的索引获取关联关系对象。"
+      },
+      {
+        "name": "get",
+        "signature": "Association get(Stringcode)",
+        "modifiers": null,
+        "description": "根据给定的编码获取关联关系对象。"
+      },
+      {
+        "name": "getCount",
+        "signature": "int getCount()",
+        "modifiers": null,
+        "description": "获取关联关系的个数。"
+      }
+    ]
+  },
+  {
+    "class": "AttributeBinding",
+    "package": "com.supermap.chart",
+    "full_class": "com.supermap.chart.AttributeBinding",
+    "file": "SuperMap iObjects Java Javadoc\\com\\supermap\\chart\\AttributeBinding.html",
+    "methods": [
+      {
+        "name": "dispose",
+        "signature": "void dispose()",
+        "modifiers": null,
+        "description": "释放对象所占用的资源。"
+      },
+      {
+        "name": "getAttribute",
+        "signature": "String getAttribute()",
+        "modifiers": null,
+        "description": "获取属性的编码"
+      },
+      {
+        "name": "getHandle",
+        "signature": "static long getHandle(com.supermap.data.InternalHandle obj)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "getMultiplicityInfinite",
+        "signature": "boolean getMultiplicityInfinite()",
+        "modifiers": null,
+        "description": null
+      },
+      {
+        "name": "getMultiplicityLower",
+        "signature": "String getMultiplicityLower()",
+        "modifiers": null,
+        "description": null
+      },
+      {
+        "name": "getMultiplicityUpper",
+        "signature": "String getMultiplicityUpper()",
+        "modifiers": null,
+        "description": null
+      },
+      {
+        "name": "getPermittedValues",
+        "signature": "String[] getPermittedValues()",
+        "modifiers": null,
+        "description": "获取属性字段的预期值。"
+      },
+      {
+        "name": "setHandle",
+        "signature": "static void setHandle(com.supermap.data.InternalHandle obj, long handle)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "setIsDisposable",
+        "signature": "static void setIsDisposable(com.supermap.data.InternalHandleDisposable obj, boolean disposable)",
+        "modifiers": "static",
+        "description": null
+      }
+    ]
+  },
+  {
+    "class": "AttributeChart",
+    "package": "com.supermap.chart",
+    "full_class": "com.supermap.chart.AttributeChart",
+    "file": "SuperMap iObjects Java Javadoc\\com\\supermap\\chart\\AttributeChart.html",
+    "methods": [
+      {
+        "name": "getAcronym",
+        "signature": "String getAcronym()",
+        "modifiers": null,
+        "description": "获取属性简称。"
+      },
+      {
+        "name": "getAttributeExpectedInputs",
+        "signature": "AttributeExpectedInputs[] getAttributeExpectedInputs()",
+        "modifiers": null,
+        "description": "获取物标属性的期望输入集合。"
+      },
+      {
+        "name": "getAttributeTypeChart",
+        "signature": "AttributeTypeChart getAttributeTypeChart()",
+        "modifiers": null,
+        "description": "获取属性的类型。"
+      },
+      {
+        "name": "getClosure",
+        "signature": "abstractString getClosure()",
+        "modifiers": null,
+        "description": null
+      },
+      {
+        "name": "getCode",
+        "signature": "abstractString getCode()",
+        "modifiers": null,
+        "description": "获取属性编码。"
+      },
+      {
+        "name": "getDefinition",
+        "signature": "String getDefinition()",
+        "modifiers": null,
+        "description": null
+      },
+      {
+        "name": "getHandle",
+        "signature": "static long getHandle(com.supermap.data.InternalHandle obj)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "getLowerBound",
+        "signature": "abstractDouble getLowerBound()",
+        "modifiers": null,
+        "description": null
+      },
+      {
+        "name": "getName",
+        "signature": "String getName()",
+        "modifiers": null,
+        "description": "获取属性的名称。"
+      },
+      {
+        "name": "getPrecision",
+        "signature": "abstractInteger getPrecision()",
+        "modifiers": null,
+        "description": null
+      },
+      {
+        "name": "getStringLength",
+        "signature": "abstractInteger getStringLength()",
+        "modifiers": null,
+        "description": "获取字符串长度。"
+      },
+      {
+        "name": "getTextPattern",
+        "signature": "abstractString getTextPattern()",
+        "modifiers": null,
+        "description": "获取文本模式。"
+      },
+      {
+        "name": "getUpperBound",
+        "signature": "abstractDouble getUpperBound()",
+        "modifiers": null,
+        "description": null
+      },
+      {
+        "name": "setHandle",
+        "signature": "static void setHandle(com.supermap.data.InternalHandle obj, long handle)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "setIsDisposable",
+        "signature": "static void setIsDisposable(com.supermap.data.InternalHandleDisposable obj, boolean disposable)",
+        "modifiers": "static",
+        "description": null
+      }
+    ]
+  },
+  {
+    "class": "AttributeExpectedInputs",
+    "package": "com.supermap.chart",
+    "full_class": "com.supermap.chart.AttributeExpectedInputs",
+    "file": "SuperMap iObjects Java Javadoc\\com\\supermap\\chart\\AttributeExpectedInputs.html",
+    "methods": [
+      {
+        "name": "dispose",
+        "signature": "void dispose()",
+        "modifiers": null,
+        "description": "释放对象所占用的资源。"
+      },
+      {
+        "name": "getDefinition",
+        "signature": "String getDefinition()",
+        "modifiers": null,
+        "description": "获取期望输入的属性值的定义。"
+      },
+      {
+        "name": "getHandle",
+        "signature": "static long getHandle(com.supermap.data.InternalHandle obj)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "getID",
+        "signature": "int getID()",
+        "modifiers": null,
+        "description": "获取期望输入的属性值的 ID。"
+      },
+      {
+        "name": "getMeaning",
+        "signature": "String getMeaning()",
+        "modifiers": null,
+        "description": "获取期望输入的属性值的含义。"
+      },
+      {
+        "name": "getReferences",
+        "signature": "String getReferences()",
+        "modifiers": null,
+        "description": "获取期望输入的属性值的参考信息。"
+      },
+      {
+        "name": "setHandle",
+        "signature": "static void setHandle(com.supermap.data.InternalHandle obj, long handle)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "setIsDisposable",
+        "signature": "static void setIsDisposable(com.supermap.data.InternalHandleDisposable obj, boolean disposable)",
+        "modifiers": "static",
+        "description": null
+      }
+    ]
+  },
+  {
+    "class": "AttributeExpectedInputsS57",
+    "package": "com.supermap.chart",
+    "full_class": "com.supermap.chart.AttributeExpectedInputsS57",
+    "file": "SuperMap iObjects Java Javadoc\\com\\supermap\\chart\\AttributeExpectedInputsS57.html",
+    "methods": [
+      {
+        "name": "dispose",
+        "signature": "void dispose()",
+        "modifiers": null,
+        "description": "释放对象所占用的资源。"
+      },
+      {
+        "name": "getDefinition",
+        "signature": "String getDefinition()",
+        "modifiers": null,
+        "description": "获取期望输入的属性值的定义。"
+      },
+      {
+        "name": "getHandle",
+        "signature": "static long getHandle(com.supermap.data.InternalHandle obj)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "getID",
+        "signature": "int getID()",
+        "modifiers": null,
+        "description": "获取期望输入的属性值的 ID。"
+      },
+      {
+        "name": "getMeaning",
+        "signature": "String getMeaning()",
+        "modifiers": null,
+        "description": "获取期望输入的属性值的含义。"
+      },
+      {
+        "name": "getReferences",
+        "signature": "String getReferences()",
+        "modifiers": null,
+        "description": "获取期望输入的属性值的参考信息。"
+      },
+      {
+        "name": "setHandle",
+        "signature": "static void setHandle(com.supermap.data.InternalHandle obj, long handle)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "setIsDisposable",
+        "signature": "static void setIsDisposable(com.supermap.data.InternalHandleDisposable obj, boolean disposable)",
+        "modifiers": "static",
+        "description": null
+      }
+    ]
+  },
+  {
+    "class": "AttributeS100",
+    "package": "com.supermap.chart",
+    "full_class": "com.supermap.chart.AttributeS100",
+    "file": "SuperMap iObjects Java Javadoc\\com\\supermap\\chart\\AttributeS100.html",
+    "methods": [
+      {
+        "name": "dispose",
+        "signature": "void dispose()",
+        "modifiers": null,
+        "description": "释放对象所占用的资源。"
+      },
+      {
+        "name": "getClosure",
+        "signature": "String getClosure()",
+        "modifiers": null,
+        "description": null
+      },
+      {
+        "name": "getCode",
+        "signature": "String getCode()",
+        "modifiers": null,
+        "description": "获取属性的代码。"
+      },
+      {
+        "name": "getHandle",
+        "signature": "static long getHandle(com.supermap.data.InternalHandle obj)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "getLowerBound",
+        "signature": "Double getLowerBound()",
+        "modifiers": null,
+        "description": "获取最小范围值"
+      },
+      {
+        "name": "getPrecision",
+        "signature": "Integer getPrecision()",
+        "modifiers": null,
+        "description": "获取精度。"
+      },
+      {
+        "name": "getStringLength",
+        "signature": "Integer getStringLength()",
+        "modifiers": null,
+        "description": "获取字符串长度。"
+      },
+      {
+        "name": "getTextPattern",
+        "signature": "String getTextPattern()",
+        "modifiers": null,
+        "description": "获取文本模式。"
+      },
+      {
+        "name": "getUpperBound",
+        "signature": "Double getUpperBound()",
+        "modifiers": null,
+        "description": "获取最大范围值"
+      },
+      {
+        "name": "setHandle",
+        "signature": "static void setHandle(com.supermap.data.InternalHandle obj, long handle)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "setIsDisposable",
+        "signature": "static void setIsDisposable(com.supermap.data.InternalHandleDisposable obj, boolean disposable)",
+        "modifiers": "static",
+        "description": null
+      }
+    ]
+  },
+  {
+    "class": "AttributeS57",
+    "package": "com.supermap.chart",
+    "full_class": "com.supermap.chart.AttributeS57",
+    "file": "SuperMap iObjects Java Javadoc\\com\\supermap\\chart\\AttributeS57.html",
+    "methods": [
+      {
+        "name": "dispose",
+        "signature": "void dispose()",
+        "modifiers": null,
+        "description": "释放 AttributeS57 对象所占用的本地资源。"
+      },
+      {
+        "name": "getAcronym",
+        "signature": "String getAcronym()",
+        "modifiers": null,
+        "description": "返回属性的简称。"
+      },
+      {
+        "name": "getAttributeExpectedInputs",
+        "signature": "AttributeExpectedInputsS57[] getAttributeExpectedInputs()",
+        "modifiers": null,
+        "description": "返回 S-57 物标属性的期望输入集合。"
+      },
+      {
+        "name": "getAttributeTypeChart",
+        "signature": "AttributeTypeChart getAttributeTypeChart()",
+        "modifiers": null,
+        "description": "返回属性的类型。"
+      },
+      {
+        "name": "getCode",
+        "signature": "int getCode()",
+        "modifiers": null,
+        "description": "返回属性的代码。"
+      },
+      {
+        "name": "getCondition",
+        "signature": "String getCondition()",
+        "modifiers": null,
+        "description": "返回使用该属性的限制条件。"
+      },
+      {
+        "name": "getDefinition",
+        "signature": "String getDefinition()",
+        "modifiers": null,
+        "description": "返回属性的定义 。"
+      },
+      {
+        "name": "getFormat",
+        "signature": "String getFormat()",
+        "modifiers": null,
+        "description": "返回属性的显示格式。"
+      },
+      {
+        "name": "getHandle",
+        "signature": "static long getHandle(com.supermap.data.InternalHandle obj)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "getIndication",
+        "signature": "String getIndication()",
+        "modifiers": null,
+        "description": "返回属性的指示信息。"
+      },
+      {
+        "name": "getLocalName",
+        "signature": "String getLocalName()",
+        "modifiers": null,
+        "description": "返回属性的本地化名称。"
+      },
+      {
+        "name": "getName",
+        "signature": "String getName()",
+        "modifiers": null,
+        "description": "返回属性的名称。"
+      },
+      {
+        "name": "getReferences",
+        "signature": "String getReferences()",
+        "modifiers": null,
+        "description": "返回属性的参考信息。"
+      },
+      {
+        "name": "getRemarks",
+        "signature": "String getRemarks()",
+        "modifiers": null,
+        "description": "返回属性的备注信息。"
+      },
+      {
+        "name": "getSubSet",
+        "signature": "String getSubSet()",
+        "modifiers": null,
+        "description": "返回属性所属集合。"
+      },
+      {
+        "name": "setHandle",
+        "signature": "static void setHandle(com.supermap.data.InternalHandle obj, long handle)",
+        "modifiers": "static",
+        "description": null
+      },
+      {
+        "name": "setIsDisposable",
+        "signature": "static void setIsDisposable(com.supermap.data.InternalHandleDisposable obj, boolean disposable)",
+        "modifiers": "static",
+        "description": null
+      }
+    ]
+  }
+]
