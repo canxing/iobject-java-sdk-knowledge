@@ -29,7 +29,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
     tools: [
       {
         name: 'search_sdk_api',
-        description: '***强制触发条件***:当你遇到来自以下包(package) 的类、接口、注解或方法调用时，必须调用此工具，来查询文档' +
+        description: '搜索 SuperMap iObjects Java SDK API。使用自然语言描述来查找相关的类和方法。' +
+          '\n***强制触发条件***:当你遇到来自以下包(package) 的类、接口、注解或方法调用时，必须调用此工具，来查询文档' +
           '\n+ com.supermap.analyst.addressmatching' +
           '\n+ com.supermap.analyst.navigation' +
           '\n+ com.supermap.analyst.networkanalyst' +
