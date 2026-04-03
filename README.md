@@ -245,23 +245,6 @@ MCP (Model Context Protocol) 是 Claude 的插件协议，允许 Claude Code 直
 
 **项目级配置**
 
-在项目根目录创建 `.mcp.json`：
-
-```json
-{
-  "mcpServers": {
-    "sdk-knowledge-base": {
-      "command": "D:/code/iobject-java-sdk-knowledge/venv/Scripts/python.exe",
-      "args": [
-        "D:/code/iobject-java-sdk-knowledge/scripts/mcp_server.py"
-      ],
-      "env": {
-        "SDK_API_URL": "http://localhost:8000"
-      }
-    }
-  }
-}
-```
 
 ```bash
 # 安装依赖
@@ -269,7 +252,7 @@ cd nodejs
 npm install
 ```
 
-配置 `.mcp.json`：
+在项目根目录创建 `.mcp.json`：
 
 ```json
 {
