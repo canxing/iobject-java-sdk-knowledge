@@ -36,32 +36,32 @@
 
 ```bash
 # 复制镜像文件到服务器
-scp sdk-kb.tar user@server:/path/to/deploy/
+scp iobject-java-sdk-knowledge.tar user@server:/path/to/deploy/
 
 # 在服务器上导入镜像
-docker load -i sdk-kb.tar
+docker load -i iobject-java-sdk-knowledge.tar
 ```
 
 **验证导入**:
 ```bash
-docker images | grep sdk-kb
+docker images | grep iobject-java-sdk-knowledge
 ```
 
 预期输出：
 ```
-sdk-kb    latest    xxxxxxx    xx minutes ago    xxx MB
+iobject-java-sdk-knowledge    latest    xxxxxxx    xx minutes ago    xxx MB
 ```
 
 ### 步骤 2: 准备数据目录
 
+如果使用数据卷挂载方式，准备数据目录：
+
 ```bash
 # 创建工作目录
 mkdir -p /opt/sdk-kb/data
-mkdir -p /opt/sdk-kb/models
 
-# 复制数据文件（如果从源码构建）
+# 复制数据文件（如果从源码构建并挂载）
 cp -r data/chroma_db /opt/sdk-kb/data/
-cp -r models/* /opt/sdk-kb/models/ 2>/dev/null || true
 
 # 设置权限
 chmod -R 755 /opt/sdk-kb
@@ -72,16 +72,21 @@ chmod -R 755 /opt/sdk-kb
 #### 方式一：使用 Docker 直接启动
 
 ```bash
-# 启动容器
+# 启动容器（镜像内已包含数据，无需挂载）
+docker run -d \
+    --name sdk-kb \
+    --restart unless-stopped \
+    -p 8000:8000 \
+    iobject-java-sdk-knowledge:latest
+
+# 或使用数据卷挂载（可选，用于动态更新数据）
 docker run -d \
     --name sdk-kb \
     --restart unless-stopped \
     -p 8000:8000 \
     -v /opt/sdk-kb/data:/app/data:ro \
-    -v /opt/sdk-kb/models:/app/models:ro \
-    -e MODEL_NAME=sentence-transformers/all-MiniLM-L6-v2 \
-    -e COLLECTION_NAME=sdk_api \
-    sdk-kb:latest
+    -e CHROMA_PATH=/app/data/chroma_db \
+    iobject-java-sdk-knowledge:latest
 
 # 查看容器状态
 docker ps -a | grep sdk-kb
@@ -99,21 +104,21 @@ version: '3.8'
 
 services:
   sdk-kb:
-    image: sdk-kb:latest
+    image: iobject-java-sdk-knowledge:latest
     container_name: sdk-kb
     restart: unless-stopped
     ports:
       - "8000:8000"
-    volumes:
-      - ./data:/app/data:ro
-      - ./models:/app/models:ro
+    # 数据已包含在镜像中，如需挂载外部数据，取消下面注释
+    # volumes:
+    #   - ./data:/app/data:ro
     environment:
       - MODEL_NAME=sentence-transformers/all-MiniLM-L6-v2
       - COLLECTION_NAME=sdk_api
       - CHROMA_PATH=/app/data/chroma_db
       - MODEL_PATH=/app/models
     healthcheck:
-      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -496,21 +501,24 @@ docker restart sdk-kb
 ### 场景 3: 更新向量模型
 
 ```bash
-# 1. 修改 Dockerfile 中的模型名称
+# 1. 修改 Dockerfile.base 中的模型名称
 # FROM: sentence-transformers/all-MiniLM-L6-v2
 # TO: sentence-transformers/all-MiniLM-L12-v2
 
-# 2. 重新构建镜像
-docker build -t sdk-kb:v2 .
+# 2. 重新构建基础镜像
+./build.sh --base
 
-# 3. 导出镜像
-docker save -o sdk-kb-v2.tar sdk-kb:v2
+# 3. 重新构建最终镜像
+./build.sh --final
 
-# 4. 在生产环境部署
-docker load -i sdk-kb-v2.tar
+# 4. 导出镜像
+docker save -o iobject-java-sdk-knowledge-v2.tar iobject-java-sdk-knowledge:latest
+
+# 5. 在生产环境部署
+docker load -i iobject-java-sdk-knowledge-v2.tar
 docker stop sdk-kb
 docker rm sdk-kb
-docker run -d --name sdk-kb -p 8000:8000 sdk-kb:v2
+docker run -d --name sdk-kb -p 8000:8000 iobject-java-sdk-knowledge:latest
 ```
 
 ### 自动化更新脚本
@@ -526,27 +534,25 @@ BACKUP_DIR="/opt/sdk-kb/backup/$(date +%Y%m%d_%H%M%S)"
 
 echo "=== SDK 知识库更新脚本 ==="
 
-# 备份现有数据
+# 备份现有数据（如果使用挂载方式）
 echo "备份现有数据..."
 mkdir -p "$BACKUP_DIR"
-cp -r /opt/sdk-kb/data/chroma_db "$BACKUP_DIR/"
+if [ -d "/opt/sdk-kb/data/chroma_db" ]; then
+    cp -r /opt/sdk-kb/data/chroma_db "$BACKUP_DIR/"
+fi
 
-# 解析新数据
-echo "解析 Javadoc..."
-python scripts/parse_javadoc.py "$JAVADOC_DIR" data/sdk_knowledge.json
-
-# 构建新向量数据库
-echo "构建向量数据库..."
-python scripts/build_vector_db.py data/sdk_knowledge.json data/chroma_db
-
-# 复制到部署目录
-echo "更新部署数据..."
-rm -rf /opt/sdk-kb/data/chroma_db
-cp -r data/chroma_db /opt/sdk-kb/data/
+# 构建新的最终镜像（包含新数据）
+echo "构建新镜像..."
+docker build -f Dockerfile.final -t iobject-java-sdk-knowledge:latest .
 
 # 重启服务
 echo "重启服务..."
-docker restart sdk-kb
+docker stop sdk-kb 2>/dev/null || true
+docker rm sdk-kb 2>/dev/null || true
+docker run -d \
+    --name sdk-kb \
+    -p 8000:8000 \
+    iobject-java-sdk-knowledge:latest
 
 # 验证
 echo "验证更新..."
@@ -555,9 +561,11 @@ if query-sdk --check; then
     echo "更新成功！"
 else
     echo "更新失败，正在恢复..."
-    rm -rf /opt/sdk-kb/data/chroma_db
-    cp -r "$BACKUP_DIR/chroma_db" /opt/sdk-kb/data/
-    docker restart sdk-kb
+    if [ -d "$BACKUP_DIR/chroma_db" ]; then
+        rm -rf /opt/sdk-kb/data/chroma_db
+        cp -r "$BACKUP_DIR/chroma_db" /opt/sdk-kb/data/
+        docker restart sdk-kb
+    fi
     exit 1
 fi
 ```
@@ -579,24 +587,20 @@ version: '3.8'
 
 services:
   sdk-kb-1:
-    image: sdk-kb:latest
+    image: iobject-java-sdk-knowledge:latest
     container_name: sdk-kb-1
     restart: unless-stopped
     ports:
       - "8000:8000"
-    volumes:
-      - ./data:/app/data:ro
     environment:
       - COLLECTION_NAME=sdk_api
 
   sdk-kb-2:
-    image: sdk-kb:latest
+    image: iobject-java-sdk-knowledge:latest
     container_name: sdk-kb-2
     restart: unless-stopped
     ports:
       - "8001:8000"
-    volumes:
-      - ./data:/app/data:ro
     environment:
       - COLLECTION_NAME=sdk_api
 

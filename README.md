@@ -20,26 +20,31 @@ SuperMap iObjects Java SDK 知识库系统，基于语义搜索的 API 文档查
 
 ## 快速开始
 
-### 1. 构建项目
+### 1. 准备 Javadoc 数据
+
+确保 `SuperMap iObjects Java Javadoc/` 目录存在（Javadoc HTML 源文件）。
+
+### 2. 构建项目
+
+#### 方式一：分层构建（推荐）
+
+无需本地 Python 环境，一条命令完成构建：
+
+```bash
+# 构建最终镜像（自动解析 Javadoc 并生成向量数据库）
+./build.sh --final
+```
+
+构建流程：
+1. 拉取基础镜像（包含 Python 依赖和模型）
+2. Stage 1: 在容器内解析 Javadoc → 生成向量数据库
+3. Stage 2: 复制向量数据库到最终镜像
+
+#### 方式二：本地构建（需要 Python 环境）
 
 ```bash
 # 运行完整构建脚本
-./build.sh
-```
-
-**注意**: 如果下载依赖较慢，可以使用清华镜像加速：
-
-```bash
-# Linux/macOS: 复制 pip 配置文件
-cp pip.conf ~/.pip/pip.conf
-
-# Windows: 复制 pip 配置文件
-mkdir %APPDATA%\pip
-copy pip.ini %APPDATA%\pip\pip.ini
-
-# 或使用环境变量
-export PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple  # Linux/macOS
-set PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple      # Windows
+./build.sh --local
 ```
 
 构建脚本会自动完成以下步骤：
@@ -47,20 +52,35 @@ set PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple      # Windows
 2. 解析 Javadoc HTML 文档
 3. 构建向量数据库
 4. 构建 Docker 镜像
-5. 导出镜像为 `sdk-kb.tar`
 
-### 2. 部署服务
+#### 方式三：分步构建
 
 ```bash
-# 导入镜像
-docker load -i sdk-kb.tar
+# 1. 构建基础镜像（包含依赖和模型）
+./build.sh --base
 
+# 2. 构建最终镜像（基于基础镜像）
+./build.sh --final
+
+# 或者一步完成
+./build.sh --all
+```
+
+### 3. 部署服务
+
+```bash
 # 启动容器
 docker run -d \
     --name sdk-kb \
     -p 8000:8000 \
+    iobject-java-sdk-knowledge:latest
+
+# 或使用数据卷（如果需要更新数据而不重建镜像）
+docker run -d \
+    --name sdk-kb \
+    -p 8000:8000 \
     -v $(pwd)/data:/app/data:ro \
-    sdk-kb:latest
+    iobject-java-sdk-knowledge:latest
 ```
 
 ### 3. 使用 CLI 查询
@@ -79,8 +99,9 @@ python scripts/query_client.py "查询空间数据"
 
 ```
 .
-├── build.sh                    # 完整构建脚本
-├── Dockerfile                  # 多阶段 Docker 镜像构建
+├── build.sh                    # 完整构建脚本（支持分层构建）
+├── Dockerfile.base             # 基础镜像（依赖 + 模型）
+├── Dockerfile.final            # 最终镜像（多阶段构建）
 ├── query-sdk                   # CLI 包装脚本
 ├── requirements.txt            # Python 依赖
 │
@@ -89,16 +110,16 @@ python scripts/query_client.py "查询空间数据"
 │   ├── parse_javadoc.py        # Javadoc HTML 解析器
 │   ├── build_vector_db.py      # 向量数据库构建器
 │   ├── api_server.py           # FastAPI HTTP 服务
-│   └── query_client.py         # CLI 查询客户端
+│   ├── query_client.py         # CLI 查询客户端
+│   └── mcp_server.py           # MCP 服务器
 │
 ├── data/                       # 数据目录
-│   ├── sdk_knowledge.json      # 解析后的 API 数据
 │   └── chroma_db/              # ChromaDB 向量数据库
 │
 ├── models/                     # 本地模型缓存
 ├── tests/                      # 测试文件
 ├── docs/                       # 文档目录
-└── SuperMap iObjects Java Javadoc/  # Javadoc HTML 源文件
+└── SuperMap iObjects Java Javadoc/  # Javadoc HTML 源文件（未包含在仓库中）
 ```
 
 ## 开发指南
@@ -117,24 +138,37 @@ pip install -r requirements.txt
 
 ### 手动构建流程
 
-如果不想使用 `build.sh`，可以手动执行各个步骤：
+#### 方式一：多阶段构建（推荐，无需本地 Python 环境）
+
+```bash
+# 1. 确保 Javadoc 数据存在
+ls "SuperMap iObjects Java Javadoc/"
+
+# 2. 构建最终镜像（自动完成解析和向量化）
+docker build -f Dockerfile.final -t iobject-java-sdk-knowledge:latest .
+
+# 3. 导出镜像
+docker save -o iobject-java-sdk-knowledge.tar iobject-java-sdk-knowledge:latest
+```
+
+#### 方式二：本地分步构建（需要 Python 环境）
 
 ```bash
 # 1. 解析 HTML
 python scripts/parse_javadoc.py \
     "SuperMap iObjects Java Javadoc" \
-    data/sdk_knowledge.json
+    data/parsed_javadoc.json
 
 # 2. 构建向量数据库
 python scripts/build_vector_db.py \
-    data/sdk_knowledge.json \
-    data/chroma_db
+    --input data/parsed_javadoc.json \
+    --output data/chroma_db
 
-# 3. 构建 Docker 镜像
-docker build -t sdk-kb:latest .
+# 3. 构建 Docker 镜像（使用多阶段构建）
+docker build -f Dockerfile.final -t iobject-java-sdk-knowledge:latest .
 
 # 4. 导出镜像
-docker save -o sdk-kb.tar sdk-kb:latest
+docker save -o iobject-java-sdk-knowledge.tar iobject-java-sdk-knowledge:latest
 ```
 
 ### 运行测试
@@ -187,6 +221,14 @@ uvicorn scripts.api_server:app --host 0.0.0.0 --port 8000
 
 ### 环境变量
 
+| 变量 | 默认值 | 说明 |
+|------|--------|------|
+| `SDK_API_URL` | http://localhost:8000 | API 服务地址 |
+| `CHROMA_PATH` | /app/data/chroma_db | ChromaDB 存储路径 |
+| `MODEL_PATH` | /app/models | 模型路径（基础镜像中已包含） |
+| `MODEL_NAME` | sentence-transformers/all-MiniLM-L6-v2 | 向量模型名称 |
+| `COLLECTION_NAME` | sdk_api | ChromaDB 集合名称 |
+
 ```bash
 # 自定义 API 地址
 export SDK_API_URL=http://localhost:8000
@@ -208,7 +250,7 @@ MCP (Model Context Protocol) 是 Claude 的插件协议，允许 Claude Code 直
 ```json
 {
   "mcpServers": {
-    "sdk-kb": {
+    "sdk-knowledge-base": {
       "command": "D:/code/iobject-java-sdk-knowledge/venv/Scripts/python.exe",
       "args": [
         "D:/code/iobject-java-sdk-knowledge/scripts/mcp_server.py"
