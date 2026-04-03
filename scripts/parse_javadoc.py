@@ -4,6 +4,8 @@ Javadoc HTML 解析器模块。
 用于解析 SuperMap iObjects Java Javadoc HTML 文件，提取类、方法、描述等信息。
 """
 
+import sys
+
 import os
 import re
 import json
@@ -294,16 +296,17 @@ class JavadocParser:
 
 
 if __name__ == "__main__":
-    # 示例用法
+    # 支持命令行参数
+    if len(sys.argv) >= 3:
+        input_dir = sys.argv[1]
+        output_file = sys.argv[2]
+    else:
+        # 默认路径
+        input_dir = "SuperMap iObjects Java Javadoc"
+        output_file = "data/parsed_javadoc.json"
+
     parser = JavadocParser(encoding="gb2312")
 
-    # 解析单个文件
-    # result = parser.parse_file("SuperMap iObjects Java Javadoc/com/supermap/realspace/AdjustColorCurveSetting.html")
-    # print(json.dumps(result, ensure_ascii=False, indent=2))
-
     # 解析整个目录
-    results = parser.parse_directory(
-        "SuperMap iObjects Java Javadoc",
-        "data/parsed_javadoc.json"
-    )
+    results = parser.parse_directory(input_dir, output_file)
     print(f"解析完成，共 {len(results)} 个类")

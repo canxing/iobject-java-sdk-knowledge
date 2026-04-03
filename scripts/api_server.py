@@ -84,14 +84,19 @@ def load_model() -> SentenceTransformer:
     """加载 sentence-transformers 模型"""
     print(f"正在加载模型: {MODEL_NAME}")
 
-    # 检查本地模型路径
-    local_model_path = os.path.join(MODEL_PATH, os.path.basename(MODEL_NAME))
-    if os.path.exists(local_model_path):
-        model_path = local_model_path
+    # 检查本地模型路径 - 首先检查 MODEL_PATH 本身是否包含模型
+    if os.path.exists(os.path.join(MODEL_PATH, "model.safetensors")):
+        model_path = MODEL_PATH
         print(f"使用本地模型: {model_path}")
     else:
-        model_path = MODEL_NAME
-        print(f"使用远程模型: {model_path}")
+        # 检查子目录（如 models/all-MiniLM-L6-v2/）
+        local_model_path = os.path.join(MODEL_PATH, os.path.basename(MODEL_NAME))
+        if os.path.exists(local_model_path):
+            model_path = local_model_path
+            print(f"使用本地模型: {model_path}")
+        else:
+            model_path = MODEL_NAME
+            print(f"使用远程模型: {model_path}")
 
     model = SentenceTransformer(model_path)
     print(f"模型加载完成，维度: {model.get_sentence_embedding_dimension()}")

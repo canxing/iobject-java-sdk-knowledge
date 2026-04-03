@@ -1,0 +1,58 @@
+# Dockerfile.final - 最终镜像，基于基础镜像（多阶段构建）
+# 构建命令: docker build -f Dockerfile.final -t iobject-java-sdk-knowledge:latest .
+
+# 基础镜像参数
+ARG BASE_IMAGE=registry.cn-chengdu.aliyuncs.com/liuxin-registry/iobject-java-sdk-knowledge-base:1.0
+
+# ========== Stage 1: 生成向量数据库 ==========
+FROM ${BASE_IMAGE} AS builder
+
+WORKDIR /app
+
+# 复制脚本
+COPY scripts/ /app/scripts/
+
+# 复制 Javadoc 数据（使用引号处理空格）
+COPY ["SuperMap iObjects Java Javadoc/", "/app/input/"]
+
+# 生成向量数据库
+RUN python scripts/parse_javadoc.py "/app/input" /tmp/parsed_javadoc.json && \
+    python scripts/build_vector_db.py --input /tmp/parsed_javadoc.json --output /app/chroma_db
+
+# ========== Stage 2: 最终镜像 ==========
+FROM ${BASE_IMAGE}
+
+# 设置环境变量
+ENV PYTHONUNBUFFERED=1 \
+    CHROMA_PATH=/app/data/chroma_db \
+    MODEL_PATH=/app/models \
+    COLLECTION_NAME=sdk_api \
+    PATH="/opt/venv/bin:$PATH"
+
+# 创建非 root 用户（安全最佳实践）
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制应用代码
+COPY scripts/ /app/scripts/
+
+# 从 builder 阶段复制生成的向量数据库
+COPY --from=builder /app/chroma_db/ /app/data/chroma_db/
+
+# 设置目录权限
+RUN chown -R appuser:appuser /app
+
+# 切换到非 root 用户
+USER appuser
+
+# 暴露端口
+EXPOSE 8000
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
+
+# 启动命令
+CMD ["uvicorn", "scripts.api_server:app", "--host", "0.0.0.0", "--port", "8000"]

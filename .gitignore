@@ -30,6 +30,8 @@ ENV/
 models/
 data/chroma_db/
 *.tar
+SuperMap iObjects Java Javadoc/
+*.zip
 
 # IDE
 .vscode/

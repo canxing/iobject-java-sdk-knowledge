@@ -1,0 +1,42 @@
+# Dockerfile.base - 基础镜像，包含所有依赖
+# 构建命令: docker build -f Dockerfile.base -t iobject-java-sdk-knowledge-base:1.0 .
+
+FROM python:3.9-slim
+
+# 清华镜像加速 apt
+RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' \
+    /etc/apt/sources.list.d/debian.sources && \
+    sed -i 's/security.debian.org/mirrors.tuna.tsinghua.edu.cn/g' \
+    /etc/apt/sources.list.d/debian.sources
+
+# 安装编译依赖
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc g++ build-essential && rm -rf /var/lib/apt/lists/*
+
+# 创建虚拟环境
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# 复制依赖文件
+COPY requirements.txt .
+
+# 安装 Python 依赖（使用 BuildKit cache 加速后续构建）
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --no-cache-dir --upgrade pip \
+    -i https://pypi.tuna.tsinghua.edu.cn/simple && \
+    pip install --no-cache-dir -r requirements.txt \
+    -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# 下载并保存模型（使用 HuggingFace 官方）
+RUN python -c "from sentence_transformers import SentenceTransformer; \
+    m = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2'); \
+    m.save('/app/models')"
+
+# 设置离线模式（后续构建使用缓存）
+ENV HF_HUB_OFFLINE=1
+
+# 创建目录结构
+RUN mkdir -p /app/scripts /app/data
+
+# 基础镜像启动命令（仅用于验证）
+CMD ["python", "--version"]
