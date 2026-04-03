@@ -201,7 +201,7 @@ MCP (Model Context Protocol) 是 Claude 的插件协议，允许 Claude Code 直
 
 ### 配置方法
 
-**方法 1：项目级配置（推荐）**
+**项目级配置**
 
 在项目根目录创建 `.mcp.json`：
 
@@ -220,33 +220,6 @@ MCP (Model Context Protocol) 是 Claude 的插件协议，允许 Claude Code 直
   }
 }
 ```
-
-**方法 2：全局配置**
-
-在 Claude Code 全局设置中添加：
-
-```json
-{
-  "mcpServers": {
-    "sdk-kb": {
-      "command": "D:/code/iobject-java-sdk-knowledge/venv/Scripts/python.exe",
-      "args": [
-        "D:/code/iobject-java-sdk-knowledge/scripts/mcp_server.py"
-      ],
-      "env": {
-        "SDK_API_URL": "http://localhost:8000"
-      }
-    }
-  }
-}
-```
-
-配置文件路径：
-- Windows: `%APPDATA%\Claude\settings.json`
-
-**方法 3：远程 API 调用（Node.js 桥接器）**
-
-当 API 服务运行在远程服务器时，使用 Node.js MCP 桥接器：
 
 ```bash
 # 安装依赖
@@ -271,11 +244,6 @@ npm install
   }
 }
 ```
-
-**特点：**
-- 支持远程 HTTP API 调用
-- 无需本地 Python 环境
-- 自动格式化搜索结果
 
 ### 使用示例
 
