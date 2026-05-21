@@ -235,16 +235,39 @@ export SDK_API_URL=http://localhost:8000
 ./query-sdk "查询"
 ```
 
-## MCP 集成（Claude Code）
+## MCP 集成
 
 ### 什么是 MCP
 
-MCP (Model Context Protocol) 是 Claude 的插件协议，允许 Claude Code 直接调用 SDK 知识库。
+MCP (Model Context Protocol) 是一种插件协议，允许 AI 编码工具直接调用 SDK 知识库。
 
-### 配置方法
+### OpenCode 配置
 
-**项目级配置**
+OpenCode 使用 `opencode.json` 或 `opencode.jsonc` 配置文件中的 `mcp` 字段添加 MCP 服务。
 
+#### 本地 MCP 服务器
+
+```jsonc
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "sdk-knowledge-base": {
+      "type": "local",
+      "command": ["node", "D:/code/iobject-java-sdk-knowledge/nodejs/mcp-bridge.js"],
+      "enabled": true,
+      "environment": {
+        "SDK_API_URL": "http://localhost:8000"
+      }
+    }
+  }
+}
+```
+
+更多参考：[OpenCode MCP Servers 文档](https://opencode.ai/docs/mcp-servers)
+
+### Claude Code 配置
+
+#### 项目级配置
 
 ```bash
 # 安装依赖
@@ -272,7 +295,7 @@ npm install
 
 ### 使用示例
 
-配置完成后，直接在 Claude Code 中提问：
+配置完成后，直接在 AI 编码工具中提问：
 
 ```
 "帮我查找打开工作空间的方法"
@@ -280,7 +303,7 @@ npm install
 "Dispose 方法是做什么的？"
 ```
 
-Claude 会自动调用 `search_sdk_api` 工具查询并返回结果。
+工具会自动调用 `search_sdk_api` 查询并返回结果。
 
 ### MCP 工具列表
 
