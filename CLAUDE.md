@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-这是一个基于语义搜索的 SuperMap iObjects Java SDK 知识库系统。系统将 Javadoc HTML 文档解析为结构化数据，使用 sentence-transformers 模型生成向量，存储在 ChromaDB 中，通过 FastAPI 提供 HTTP 服务，并可通过 MCP (Model Context Protocol) 与 Claude Code 集成。
+这是一个基于语义搜索的 SuperMap iObjects Java SDK 知识库系统。系统将 Javadoc HTML 文档解析为结构化数据，使用 sentence-transformers 模型生成向量，存储在 ChromaDB 中，通过 FastAPI 提供 HTTP 服务。可通过 Skill 或 MCP (Model Context Protocol) 与 AI 编码工具集成。
 
 ## 系统架构
 
@@ -25,11 +25,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │  (CLI工具)      │     │  (sdk-kb:latest) │
 └─────────────────┘     └──────────────────┘
          │
-         ▼
-┌─────────────────┐
-│  MCP Server     │◀──── Claude Code 集成
-│  (mcp_server.py)│
-└─────────────────┘
+    ┌────┴────┐
+    ▼         ▼
+┌────────┐ ┌─────────┐
+│ Skill  │ │ MCP     │◀──── AI 编码工具集成
+│(search │ │ Server  │
+│ .js)   │ │(Python/ │
+└────────┘ │ Node.js)│
+           └─────────┘
 ```
 
 ## 常用命令
@@ -129,6 +132,28 @@ MCP 服务器实现，暴露两个工具：
 ### nodejs/mcp-bridge.js
 Node.js MCP 桥接器，用于远程 API 场景。当 API 服务运行在远程服务器时使用。
 
+### skills/iobjects-sdk-knowledge-search/
+Skill 实现，包含 SKILL.md（触发条件和使用说明）和 search.js（零依赖 Node.js 查询脚本）。
+适用于支持 Skill 规范的 AI 编码工具（Pi、Claude Code 等）。
+
+### 使用方法
+
+```bash
+# 基本查询
+node .pi/skills/iobjects-sdk-knowledge-search/search.js "如何创建数据源"
+
+# 指定返回结果数量
+node .pi/skills/iobjects-sdk-knowledge-search/search.js "Workspace 打开方法" 10
+```
+
+环境变量 `SDK_API_URL` 可覆盖默认 API 地址。
+
+### 与 MCP 的关系
+
+Skill 和 MCP 是两种独立的集成方式，可同时使用：
+- **Skill** — 轻量，零依赖，适用于支持 Skill 规范的工具
+- **MCP** — 功能更完整，适用于支持 MCP 协议的工具
+
 ## MCP 配置
 
 项目已配置 `.mcp.json`，Claude Code 会自动加载：
@@ -136,7 +161,7 @@ Node.js MCP 桥接器，用于远程 API 场景。当 API 服务运行在远程�
 ```json
 {
   "mcpServers": {
-    "sdk-knowledge-base": {
+    "iobjects-sdk-knowledge-search": {
       "command": "D:/code/iobject-java-sdk-knowledge/venv/Scripts/python.exe",
       "args": ["D:/code/iobject-java-sdk-knowledge/scripts/mcp_server.py"],
       "env": {"SDK_API_URL": "http://localhost:8000"}
@@ -150,7 +175,7 @@ Node.js MCP 桥接器，用于远程 API 场景。当 API 服务运行在远程�
 ```json
 {
   "mcpServers": {
-    "sdk-knowledge-base": {
+    "iobjects-sdk-knowledge-search": {
       "command": "node",
       "args": ["D:/code/iobject-java-sdk-knowledge/nodejs/mcp-bridge.js"],
       "env": {"SDK_API_URL": "http://remote-host:8000"}
@@ -195,7 +220,7 @@ Javadoc HTML 文件使用 GB2312 编码，解析器默认使用此编码。如�
 
 | 变量 | 默认值 | 说明 |
 |------|--------|------|
-| `SDK_API_URL` | http://localhost:8000 | API 服务地址 |
+| `SDK_API_URL` | http://172.27.16.134:8000 | API 服务地址（Skill 默认值） / http://localhost:8000（MCP 默认值） |
 | `CHROMA_PATH` | data/chroma_db | ChromaDB 存储路径 |
 | `MODEL_PATH` | models | 模型缓存路径 |
 | `MODEL_NAME` | sentence-transformers/all-MiniLM-L6-v2 | 向量模型名称 |

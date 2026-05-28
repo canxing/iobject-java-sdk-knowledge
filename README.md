@@ -9,6 +9,7 @@ SuperMap iObjects Java SDK 知识库系统，基于语义搜索的 API 文档查
 - **向量数据库**: 使用 ChromaDB 存储和检索向量化的 API 文档
 - **HTTP API**: 提供 FastAPI 构建的 RESTful API 服务
 - **CLI 工具**: 提供方便的命令行查询工具
+- **Skill 集成**: 提供零依赖 Skill，适用于 Pi、Claude Code 等支持 Skill 规范的 AI 编码工具
 
 ## 使用示例
 
@@ -112,6 +113,13 @@ python scripts/query_client.py "查询空间数据"
 │   ├── api_server.py           # FastAPI HTTP 服务
 │   ├── query_client.py         # CLI 查询客户端
 │   └── mcp_server.py           # MCP 服务器
+│
+├── nodejs/                     # Node.js MCP 桥接器
+│   └── mcp-bridge.js
+│
+├── .pi/skills/iobjects-sdk-knowledge-search/  # Skill 集成
+│   ├── SKILL.md                # 技能定义
+│   └── search.js               # 零依赖查询脚本
 │
 ├── data/                       # 数据目录
 │   └── chroma_db/              # ChromaDB 向量数据库
@@ -223,7 +231,7 @@ uvicorn scripts.api_server:app --host 0.0.0.0 --port 8000
 
 | 变量 | 默认值 | 说明 |
 |------|--------|------|
-| `SDK_API_URL` | http://localhost:8000 | API 服务地址 |
+| `SDK_API_URL` | http://172.27.16.134:8000 | API 服务地址（Skill 默认值） / http://localhost:8000（CLI/MCP 默认值） |
 | `CHROMA_PATH` | /app/data/chroma_db | ChromaDB 存储路径 |
 | `MODEL_PATH` | /app/models | 模型路径（基础镜像中已包含） |
 | `MODEL_NAME` | sentence-transformers/all-MiniLM-L6-v2 | 向量模型名称 |
@@ -234,6 +242,10 @@ uvicorn scripts.api_server:app --host 0.0.0.0 --port 8000
 export SDK_API_URL=http://localhost:8000
 ./query-sdk "查询"
 ```
+
+## Skill 集成
+
+项目提供了 `skills/iobjects-sdk-knowledge-search/` Skill，适用于支持 Skill 规范的 AI 编码工具。
 
 ## MCP 集成
 
@@ -251,7 +263,7 @@ OpenCode 使用 `opencode.json` 或 `opencode.jsonc` 配置文件中的 `mcp` �
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "sdk-knowledge-base": {
+    "iobjects-sdk-knowledge-search": {
       "type": "local",
       "command": ["node", "D:/code/iobject-java-sdk-knowledge/nodejs/mcp-bridge.js"],
       "enabled": true,
@@ -280,7 +292,7 @@ npm install
 ```json
 {
   "mcpServers": {
-    "sdk-knowledge-base": {
+    "iobjects-sdk-knowledge-search": {
       "command": "node",
       "args": [
         "D:/code/iobject-java-sdk-knowledge/nodejs/mcp-bridge.js"
